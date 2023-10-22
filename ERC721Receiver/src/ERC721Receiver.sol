@@ -48,7 +48,6 @@ contract NFTReceiver is IERC721Receiver, HW_Token {
       hwToken = HW_Token(hwTokenAddr);
     }
 
-
     function onERC721Received(address operator, address from, uint256 tokenId, bytes calldata data) external virtual override returns (bytes4){
         operator = address(this);
 
@@ -58,9 +57,5 @@ contract NFTReceiver is IERC721Receiver, HW_Token {
         }
 
         return this.onERC721Received.selector;
-    }
-
-    function queryHwToken() external view returns(address) {
-        return address(hwToken);
     }
 }
