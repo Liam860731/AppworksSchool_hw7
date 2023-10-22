@@ -1,0 +1,21 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "test/ERC721Receiver.sol.t.sol",
+    "id": 42365,
+    "exportedSymbols": {},
+    "nodeType": "SourceUnit",
+    "src": "323:0:29",
+    "nodes": [],
+    "license": "UNLICENSED"
+  },
+  "id": 29
+}
