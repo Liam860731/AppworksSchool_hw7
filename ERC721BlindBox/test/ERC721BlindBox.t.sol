@@ -21,9 +21,9 @@ contract BlindBoxTest is Test {
     function testAfterOpenBlindBox() public {
 
         vm.startPrank(user1);
-        bool isMint1 = blindBox.mint(user1, 0);
+        bool isMint1 = blindBox.mint(user1);
         require(isMint1);
-        bool isMint2 = blindBox.mint(user2, 1);
+        bool isMint2 = blindBox.mint(user2);
         require(isMint2);
         string memory beforeTokenUri1 = blindBox.tokenURI(0);
         string memory beforeTokenUri2 = blindBox.tokenURI(1);
