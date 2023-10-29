@@ -40,7 +40,6 @@ contract HW_Token is ERC721, ERC721Burnable {
 
 contract NFTReceiver is IERC721Receiver, HW_Token {
 
-    address public _owner = msg.sender;
     HW_Token public hwToken;
 
     constructor(address hwTokenAddr)
@@ -49,10 +48,9 @@ contract NFTReceiver is IERC721Receiver, HW_Token {
     }
 
     function onERC721Received(address operator, address from, uint256 tokenId, bytes calldata data) external virtual override returns (bytes4){
-        operator = address(this);
 
         if(msg.sender != address(hwToken) ){
-            IERC721(msg.sender).safeTransferFrom(operator, from, tokenId, data);
+            IERC721(msg.sender).safeTransferFrom(address(this), from, tokenId, data);
             hwToken.mint(from, tokenId);
         }
 
