@@ -11,8 +11,10 @@ contract BlindBox is ERC721, Ownable, ERC721Burnable {
 
     event SetTokenURI(uint256 indexed tokenId, string indexed tokenURI);
 
-    uint16 _totalSupply;
+    uint16 _remainAmount;
     uint256 _deploymentTime;
+    uint256 _tokenId;
+    uint256 _OpenedBlindBoxAmount;
     mapping(uint256 => address) _owners;
     mapping(uint256 => string) _tokenURIs;
     mapping(uint256 => bool) _isOpenBlind;
@@ -21,30 +23,38 @@ contract BlindBox is ERC721, Ownable, ERC721Burnable {
 
 
     constructor(address initialOwner)
-    ERC721("Blind Box NFT", "BBNFT")
-    Ownable(initialOwner)
+        ERC721("Blind Box NFT", "BBNFT")
+        Ownable(initialOwner)
     {   
-        _totalSupply = 500;
+        _remainAmount = 500;
         _blindBoxAddr = "ipfs://QmZhioy9qwriJBLAocRVK6A5c7uZnT2fzBJN8kujyuE2D3/BlindBox.json";
         _pikachuAddr = "ipfs://QmZhioy9qwriJBLAocRVK6A5c7uZnT2fzBJN8kujyuE2D3/Pikachu.json";
         _deploymentTime = block.timestamp;
     }
 
-    function mint(address to, uint256 tokenId) public returns(bool){
-        require(_totalSupply > 0, "ERROR: No more NFT can mint");
-        _mint(to, tokenId);
-        _tokenURIs[tokenId] = _blindBoxAddr;
-        _totalSupply -= 1;
+    function mint(address to) public returns(bool){
+
+        require(_remainAmount > 0, "ERROR: No more NFT can mint");
+        require(_tokenId < 500, "ERROR: NFT has reached the upper limit (500)");
+
+        _mint(to, _tokenId);
+        _tokenURIs[_tokenId] = _blindBoxAddr;
+        _tokenId += 1;
+        _remainAmount -= 1;
         return true;
     }
 
     function openBlindBox() external onlyOwner returns(bool){
+
         require(block.timestamp >= _deploymentTime + 10 minutes, "It's not time to open the blind box yet");
-        for(uint256 i; i < 500 - _totalSupply; i++){
-            _tokenURIs[i] = _pikachuAddr;
-            _isOpenBlind[i] = true;
-            emit SetTokenURI(i, _pikachuAddr);
+
+        for(_OpenedBlindBoxAmount; _OpenedBlindBoxAmount < 500 - _remainAmount; _OpenedBlindBoxAmount++){
+            _tokenURIs[_OpenedBlindBoxAmount] = _pikachuAddr;
+            _isOpenBlind[_OpenedBlindBoxAmount] = true;
+            emit SetTokenURI(_OpenedBlindBoxAmount, _pikachuAddr);
         }
+
+        _OpenedBlindBoxAmount = 500 - _remainAmount;
         return true;
     }
 
@@ -54,8 +64,8 @@ contract BlindBox is ERC721, Ownable, ERC721Burnable {
         return _tokenURIs[tokenId];
     }
 
-    function totalSupply() external view returns(uint16){
-        return _totalSupply;
+    function remainAmount() external view returns(uint16){
+        return _remainAmount;
     }
 
 }
